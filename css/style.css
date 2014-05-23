@@ -1,0 +1,54 @@
+.game {
+	width:45%;
+}
+
+ .score {
+ 	
+ 	
+ 	padding-left:45%;
+ 	font-size:350px;
+ }
+
+.cardWrapper {
+	float:left;
+    height: 160px;
+	width:160px;
+	margin: 10px;
+}
+
+.front, .back {
+	position: absolute;
+    height: 160px;
+	width:160px;
+	font-family: 'Helvetica';	
+	font-size:110px;
+	background:white;
+	text-align:center;
+		
+	color:#6666FF;
+	border:5px solid #6666FF;
+
+}
+
+.solved {
+	border:5px solid green;
+}
+
+.back {
+	  
+ 	  background-size: auto 160px;
+  	  background-position: center;
+}
+
+ .noSelect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}

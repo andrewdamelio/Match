@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" ng-App="MatchGame">
+    <head>
+      <meta charset="UTF-8">
+      <title>Match Game</title>
+      <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body ng-controller="MainCtrl" class='noSelect' ng-cloak>
+    	<p>
+	<div class='game'>
+
+	  	<cards  solved='{{solvedBorder}}' class='cardWrapper card-animation'
+	  			  ng-class="{'answer':showCard}"
+	  			  ng-repeat='q in cards |  orderBy:random'
+	  			  ng-mouseenter='setHighlight(this)'
+	  			  ng-click='checkIn()'>
+	  			  <div class='card'>
+	  			  	<div class='front'>{{q.text}}</div>
+	  			  <div class='back' style='background-image:url({{q.image}})'></div>
+		 
+	  			 </div>
+	  	</cards>
+
+</div>
+	  	<p>
+	  		<andydrew></andydrew>
+	
+		<p>
+			<button class='btn btn-danger' ng-click='resetGame()'>Reset</button>
+
+
+		<br />
+		<br />
+		<br />
+		<div class='score'>{{attempts || 0}}</div>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-animate.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.7/TweenMax.min.js"></script>
+		<script src="app.js"></script>
+
+    </body>
+
+</html>
