@@ -2,7 +2,7 @@
 <html lang="en" ng-App="MatchGame">
     <head>
       <meta charset="UTF-8">
-      <title>Match Game</title>
+      <title>Memory Match</title>
       <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
       <link rel="stylesheet" href="css/style.css">
     </head>
@@ -17,7 +17,7 @@
 	  			  ng-mouseenter='setHighlight(this)'
 	  			  ng-click='checkIn()'>
 	  			  <div class='card'>
-	  			  	<div class='front'>{{q.text}}</div>
+	  			  	<div class='front' style='background-image:url({{q.cardStyle}})'></div>
 	  			  <div class='back' style='background-image:url({{q.image}})'></div>
 		 
 	  			 </div>

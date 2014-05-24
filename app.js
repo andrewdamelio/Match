@@ -1,109 +1,4 @@
-var MatchGame = angular.module("MatchGame", ['ngAnimate']);;
-
-MatchGame.controller('MainCtrl', ['$scope','matchService', '$timeout','$window', function ($scope, matchService, $timeout, $window) {
-
-	
-	
-
-	$scope.resetGame = function() {
-	
-		$window.location.reload();
-		/*	matchService.setCount(0);
-			matchService.setKey();	
-			$scope.$broadcast("init"); 
-			//shuffleArray($scope.cards);*/
-		//	$scope.cards = [];
-	}
-
-
-	$scope.$watch('countService.getCount()', function() {
-			if (matchService.getCount() >= 2) {
-				console.log("RESETING...");
-				
-				$timeout(function() {
-					
-					var key = matchService.getKey();
-					$scope.$broadcast("solved", key);
-					
-					matchService.setKey();	
-					matchService.setCount(0);
-					$scope.$broadcast("reset"); 
-				
-					if (matchService.getMatch() < ( $scope.cards.length /2)) {
-						matchService.nextTurn();
-						$scope.attempts = matchService.getTurn();
-					}
-					else {
-							
-							
-							var timeout =500;
-							angular.forEach($scope.cards, function(card) {
-
-
-								$timeout(function() { $scope.$broadcast("remove", card.key); },timeout);
-								timeout=timeout+100;
-								
-
-						
-							})
-							
-										
-					$(".score").html("nice").hide().fadeIn(1000, function() {
-							$('.score').fadeOut(2000, function() {
-
-								$scope.resetGame();	
-							});
-							
-						})//animate({fontSize: "500px"}, 300)
-						
-
-					}
-				},600)
-
-			}
-	});
-
-	var shuffleArray = function(array) {
-	    var m = array.length, t, i;
-	  	
-	    // While there remain elements to shuffle
-	    while (m) {
-	      // Pick a remaining element…
-	      i = Math.floor(Math.random() * m--);
-	  
-	      // And swap it with the current element.
-	      t = array[m];
-	      array[m] = array[i];
-	      array[i] = t;
-	    }
-		return array;
-	};
-
-$scope.countService =matchService;
-	$scope.attempts = matchService.getTurn();
-	$scope.reset=false;
-	matchService.setCount(0);
-
-	$scope.cards = [
-			{text: "\u00D7", key: '1', image: 'assets/nodejs.png'},
-			{text: "\u00D7", key: '2', image: 'assets/angular.png'},
-			{text: "\u00D7", key: '3', image: 'assets/jquery.png'},
-			{text: "\u00D7", key: '4', image: 'assets/emberjs.png'},
-			{text: "\u00D7", key: '5', image: 'assets/js.png'},
-			{text: "\u00D7", key: '6', image: 'assets/backbonejs.png'},
-			{text: "\u00D7", key: '7', image: 'assets/css3.png'},
-			{text: "\u00D7", key: '8', image: 'assets/html5.png'}
-	];
-			
-	var tempCards = $scope.cards;
-
-	angular.forEach(tempCards, function(card) {
-		$scope.cards.push({text:card.text, key:card.key, image:card.image});
-	})
-
-	shuffleArray($scope.cards);
-}]);
-
+var MatchGame = angular.module("MatchGame", ['ngAnimate']);
 
 // Match Service:  Use to communicate between cards. Keeps track of current turn, correct matches count and which card is currently flipped.
 MatchGame.factory('matchService', [function () {
@@ -165,17 +60,8 @@ MatchGame.factory('matchService', [function () {
 		nextTurn : nextTurn
 
 	};
-}])
+}]);
 
-
-/*
-		$scope.$on("init", function(e) {
-			$scope.showCard = false;
-			$scope.solved = false;
-			console.log("INIT "+$scope.q.showCard);
-			//	$scope.showCard=false;
-		})
-*/
 
 MatchGame.directive('cards', ['matchService', function (matchService) {
 	var controller = function($scope)  {
@@ -255,11 +141,11 @@ MatchGame.directive('cards', ['matchService', function (matchService) {
 				//console.log(this);  	//element
 				//console.log($(this));	//jQuery object of element
 				//console.log(element);	//jQuery object of element
-				element.find('.front').css("background-color","#6666FF").css("color","white");		
+				element.find('.front').css("background","").css('background-color', '#663399');
 			});
 
 			element.on('mouseleave',function() {
-				element.find('.front').css("background-color","white").css("color", "#6666FF");
+				element.find('.front').css("background","url(assets/card.png)");
 			});
 
 			attrs.$observe('solved', function(newValue, oldValue) {   //scope.$watch('solvedBorder', function(newValue) {
@@ -271,7 +157,7 @@ MatchGame.directive('cards', ['matchService', function (matchService) {
 			scope.$watch('remove', function(newValue) {
 				if (newValue) {
 					element.find('.back').slideUp();
-					element.find('.front').slideUp();
+				
 				}
 			
 			});
@@ -279,33 +165,6 @@ MatchGame.directive('cards', ['matchService', function (matchService) {
 		}
 	};
 }]);
-
-
-MatchGame.directive('andydrew', [function () {
-	return {
-		restrict: 'E',
-		
-		template: "<ul style='list-style-type: none'></ul>",
-		link: function (scope, element, attrs) {
-		
-
-
-			$("<li><a></a></li>")
-			    .find("a")
-			        .attr("href", "https://github.com/andrewdamelio")
-			        .html("andydrew")
-			     .end()
-			    .appendTo("ul");
-
-/*			element.find('li').last().on('mouseenter', function() {
-					console.log("COOOL!");
-			})	
-			*/
-		}
-	};
-}])
-
-
 
 MatchGame.animation('.card-animation', function() {
 	TweenLite.set('.cardWrapper',{perspective:800});
@@ -333,8 +192,126 @@ MatchGame.animation('.card-animation', function() {
 			}
 		}
 	}
-
 });
+
+
+MatchGame.controller('MainCtrl', ['$scope','matchService', '$timeout','$window', function ($scope, matchService, $timeout, $window) {
+
+
+
+	$scope.$watch('countService.getCount()', function() {
+			if (matchService.getCount() >= 2) {
+				console.log("RESETING...");
+				
+				$timeout(function() {
+					
+					var key = matchService.getKey();
+					$scope.$broadcast("solved", key);
+					
+					matchService.setKey();	
+					matchService.setCount(0);
+					$scope.$broadcast("reset"); 
+				
+					if (matchService.getMatch() < ( $scope.cards.length /2)) {
+						matchService.nextTurn();
+						$scope.attempts = matchService.getTurn();
+					}
+					else {
+							
+						
+							var timeout =500;
+							angular.forEach($scope.cards, function(card) {
+
+
+								$timeout(function() { $scope.$broadcast("remove", card.key); },timeout);
+								timeout=timeout+100;
+								
+
+						
+							})
+							
+										
+							$(".score").html("nice").hide().fadeIn(1000, function() {
+							$('.score').fadeOut(2000, function() {
+
+								$scope.resetGame();	
+							});
+							
+						})//animate({fontSize: "500px"}, 300)
+						
+
+					}
+				},600)
+
+			}
+	});
+
+	var shuffleArray = function(array) {
+	    var m = array.length, t, i;
+	  	
+	    // While there remain elements to shuffle
+	    while (m) {
+	      // Pick a remaining element…
+	      i = Math.floor(Math.random() * m--);
+	  
+	      // And swap it with the current element.
+	      t = array[m];
+	      array[m] = array[i];
+	      array[i] = t;
+	    }
+		return array;
+	};
+
+	$scope.resetGame = function() {
+		$window.location.reload();
+	};
+
+	$scope.countService =matchService;
+	$scope.attempts = matchService.getTurn();
+	$scope.reset=false;
+	
+	$scope.cards = [
+			{cardStyle: "assets/card.png", key: '1', image: 'assets/nodejs.png'},
+			{cardStyle: "assets/card.png", key: '2', image: 'assets/angular.png'},
+			{cardStyle: "assets/card.png", key: '3', image: 'assets/jquery.png'},
+			{cardStyle: "assets/card.png", key: '4', image: 'assets/emberjs.png'},
+			{cardStyle: "assets/card.png", key: '5', image: 'assets/js.png'},
+			{cardStyle: "assets/card.png", key: '6', image: 'assets/backbonejs.png'},
+			{cardStyle: "assets/card.png", key: '7', image: 'assets/css3.png'},
+			{cardStyle: "assets/card.png", key: '8', image: 'assets/html5.png'}
+	];
+			
+	var tempCards = $scope.cards;
+
+	angular.forEach(tempCards, function(card) {
+		$scope.cards.push({cardStyle:card.cardStyle, key:card.key, image:card.image});
+	})
+
+	shuffleArray($scope.cards);
+}]);
+
+
+MatchGame.directive('andydrew', [function () {
+	return {
+		restrict: 'E',
+		
+		template: "<ul style='list-style-type: none'></ul>",
+		link: function (scope, element, attrs) {
+		
+
+
+			
+
+/*			element.find('li').last().on('mouseenter', function() {
+					console.log("COOOL!");
+			})	
+			*/
+		}
+	};
+}])
+
+
+
 
 
 
