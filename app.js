@@ -1,3 +1,5 @@
+'use strict';
+
 var MatchGame = angular.module("MatchGame", ['ngAnimate']);
 
 // Match Service:  Use to communicate between cards. Keeps track of current turn, correct matches count and which card is currently flipped.
@@ -7,16 +9,15 @@ MatchGame.factory('matchService', [function () {
 	var turns = 1;
 	var matches =0;
 
-
 	// setCount: sets the current card being fliped. 1st guess or 2nd guess
 	var setCount = function(val) {
 		count = val;
-	}
+	};
 
 	// getCount: returns the amount of cards that have been fliped this turn, 1 or 2.
 	var getCount = function() {
 		return count;
-	}
+	};
 
 	// setKey: sets the currently card that has been flipped - used to determine matches. 
 	var setKey = function(key) {
@@ -47,7 +48,6 @@ MatchGame.factory('matchService', [function () {
 	var nextTurn = function() {
 		turns++;
 	};
-
 	
 	return {
 		setCount:setCount,
@@ -58,10 +58,8 @@ MatchGame.factory('matchService', [function () {
 		anotherMatch : anotherMatch,
 		getTurn : getTurn,
 		nextTurn : nextTurn
-
 	};
 }]);
-
 
 MatchGame.directive('cards', ['matchService', function (matchService) {
 	var controller = function($scope)  {
@@ -69,46 +67,45 @@ MatchGame.directive('cards', ['matchService', function (matchService) {
 		$scope.solved = false;
 		$scope.solvedBorder = false;
 		$scope.remove = false;
-		 
-
 
 		// checkIn: called when a card is clicked. If 2 guesses haven't already been made, showCard becomes true and the card is flipped.
 		$scope.checkIn =function() {
-				 if (Number(matchService.getCount())<2) {
-				 	$scope.showCard=true;
-				 }	
+				if (Number(matchService.getCount())<2) {
+					$scope.showCard=true;
+				}	
 		};
 		
 		// triggered by checkIn when showCard changes from false -> true
 		$scope.$watch('showCard', function() {
 			if ($scope.showCard) {
-					if (matchService.getKey()) {									// if the user has already made a guess				
-						 if ($scope.q.key === matchService.getKey()) {					// if the guess matches the previous guess
-						 		console.log("WIN");
-						 		matchService.anotherMatch()									// the user has created a match
-						 }
-						 else {															// if the guess doesn't match the previous guess
-						 		console.log("YOU LOSE");
-						 		matchService.setKey();										// clear the current key - elsewhere the current turn will be reset
-						 }
+				if (matchService.getKey()) {									// if the user has already made a guess				
+					if ($scope.q.key === matchService.getKey()) {					// if the guess matches the previous guess
+						console.log("WIN");
+						matchService.anotherMatch();								// the user has created a match
 					}
-					else {
-						matchService.setKey($scope.q.key);							// if the user hasn't made a guess, record currently guessed card
+					else {															// if the guess doesn't match the previous guess
+						console.log("YOU LOSE");
+						matchService.setKey();										// clear the current key - elsewhere the current turn will be reset
 					}
-					console.log("fliped - " +$scope.q.key);
-					var count = matchService.getCount();
-					count++;
-					matchService.setCount(count);									// increase count - aka the number of cards currently flipped
+				}
+				else {
+					matchService.setKey($scope.q.key);							// if the user hasn't made a guess, record currently guessed card
+				}
+				console.log("fliped - " +$scope.q.key);
+				var count = matchService.getCount();
+				count++;
+				matchService.setCount(count);									// increase count - aka the number of cards currently flipped
 			}
 		});
 
 		// when 'solved' is boardcasted, check provided key against current scope key. 
 		$scope.$on("solved", function(e, key) {
-				if (key === $scope.q.key) {					// if the key is a match card is already solved
-					$scope.solved = true;					// since card is solved, set solved so card doesn'tt reset when 'reset' is triggered
-					$scope.solvedBorder = "solved";			// sets card border color to show its solved
-				}
-    	});
+			
+			if (key === $scope.q.key) {					// if the key is a match card is already solved
+				$scope.solved = true;					// since card is solved, set solved so card doesn'tt reset when 'reset' is triggered
+				$scope.solvedBorder = "solved";			// sets card border color to show its solved
+			}
+		});
 
 		// when 'reset' is boardcasted, reset controller varaibles 
 		$scope.$on("reset", function(e) {
@@ -116,29 +113,23 @@ MatchGame.directive('cards', ['matchService', function (matchService) {
 				console.log("Cards RESET.");
 				$scope.showCard=false;
 				$scope.solvedBorder=false;
-
-
 			}
-    	});
-
+		});
 
 		$scope.$on("remove", function(e, key) {
-				if (key === $scope.q.key) {
-					 $scope.remove=true;
-				}
-    	});    	
-
-
+			if (key === $scope.q.key) {
+				$scope.remove=true;
+			}
+		});
 	};
+
 	return {
 		restrict: 'E',
 		scope:true,
 		controller: controller,	
 		link: function(scope,element,attrs) {
-			
 			element.on('mouseenter',function() {
-				
-				//console.log(this);  	//element
+				//console.log(this);	//element
 				//console.log($(this));	//jQuery object of element
 				//console.log(element);	//jQuery object of element
 				element.find('.front').css("background","").css('background-color', '#663399');
@@ -159,23 +150,21 @@ MatchGame.directive('cards', ['matchService', function (matchService) {
 					element.find('.back').slideUp();
 				
 				}
-			
 			});
-
 		}
 	};
 }]);
 
 MatchGame.animation('.card-animation', function() {
-	TweenLite.set('.cardWrapper',{perspective:800});
+	TweenLite.set('.card-animation',{perspective:800});
 	TweenLite.set('.card', {transformStyle: 'preserve-3d'});
 	TweenLite.set('.back', {rotationY: '-180'});
 	TweenLite.set(['.back', '.front'], { backfaceVisibility: 'hidden'});
 	return {
 		beforeAddClass: function(element, className, done) {
 			if (className == 'answer') {
-				TweenLite.to(element.find('.card'), .5,
-	 			 {rotationY:180, ease:Back.easeOut, onComplete: done});
+				TweenLite.to(element.find('.card'), 0.5,
+				{rotationY:180, ease:Back.easeOut, onComplete: done});
 			}
 			else {
 				done();
@@ -184,81 +173,59 @@ MatchGame.animation('.card-animation', function() {
 
 		beforeRemoveClass: function(element, className, done) {
 			if (className == 'answer') {
-				TweenLite.to(element.find('.card'), .5,
-	 			 {rotationY:0, ease:Back.easeOut, onComplete: done});
+				TweenLite.to(element.find('.card'), 0.5,
+				{rotationY:0, ease:Back.easeOut, onComplete: done});
 			}
 			else {
 				done();
 			}
 		}
-	}
+	};
 });
 
 
 MatchGame.controller('MainCtrl', ['$scope','matchService', '$timeout','$window', function ($scope, matchService, $timeout, $window) {
-
-
-
 	$scope.$watch('countService.getCount()', function() {
-			if (matchService.getCount() >= 2) {
-				console.log("RESETING...");
-				
-				$timeout(function() {
-					
-					var key = matchService.getKey();
-					$scope.$broadcast("solved", key);
-					
-					matchService.setKey();	
-					matchService.setCount(0);
-					$scope.$broadcast("reset"); 
-				
-					if (matchService.getMatch() < ( $scope.cards.length /2)) {
-						matchService.nextTurn();
-						$scope.attempts = matchService.getTurn();
-					}
-					else {
-							
-						
-							var timeout =500;
-							angular.forEach($scope.cards, function(card) {
-
-
-								$timeout(function() { $scope.$broadcast("remove", card.key); },timeout);
-								timeout=timeout+100;
-								
-
-						
-							})
-							
-										
-							$(".score").html("nice").hide().fadeIn(1000, function() {
-							$('.score').fadeOut(2000, function() {
-
-								$scope.resetGame();	
-							});
-							
-						})//animate({fontSize: "500px"}, 300)
-						
-
-					}
-				},600)
-
-			}
+		if (matchService.getCount() >= 2) {
+			console.log("RESETING...");
+			$timeout(function() {
+				var key = matchService.getKey();
+				$scope.$broadcast("solved", key);
+				matchService.setKey();	
+				matchService.setCount(0);
+				$scope.$broadcast("reset"); 
+		
+				if (matchService.getMatch() < ( $scope.cards.length /2)) {
+					matchService.nextTurn();
+					$scope.attempts = matchService.getTurn();
+				}
+				else {
+					var timeout =500;
+					angular.forEach($scope.cards, function(card) {
+						$timeout(function() { $scope.$broadcast("remove", card.key); },timeout);
+						timeout=timeout+100;
+					});
+					$(".score").html("nice").hide().fadeIn(1000, function() {
+						$('.score').fadeOut(2000, function() {
+							$scope.resetGame();	
+						});
+					});//animate({fontSize: "500px"}, 300)
+				}
+			},600);
+		}
 	});
 
 	var shuffleArray = function(array) {
-	    var m = array.length, t, i;
-	  	
-	    // While there remain elements to shuffle
-	    while (m) {
-	      // Pick a remaining element…
-	      i = Math.floor(Math.random() * m--);
-	  
-	      // And swap it with the current element.
-	      t = array[m];
-	      array[m] = array[i];
-	      array[i] = t;
-	    }
+		var m = array.length, t, i;
+		// While there remain elements to shuffle
+		while (m) {
+			// Pick a remaining element…
+			i = Math.floor(Math.random() * m--);
+			// And swap it with the current element.
+			t = array[m];
+			array[m] = array[i];
+			array[i] = t;
+		}
 		return array;
 	};
 
@@ -285,31 +252,26 @@ MatchGame.controller('MainCtrl', ['$scope','matchService', '$timeout','$window',
 
 	angular.forEach(tempCards, function(card) {
 		$scope.cards.push({cardStyle:card.cardStyle, key:card.key, image:card.image});
-	})
-
+	});
 	shuffleArray($scope.cards);
 }]);
-
 
 MatchGame.directive('andydrew', [function () {
 	return {
 		restrict: 'E',
-		
 		template: "<ul style='list-style-type: none'></ul>",
 		link: function (scope, element, attrs) {
-		
+			$("<li><a></a></li>")
+				.find("a")
+				.attr("href", "https://github.com/andrewdamelio")
+				.html("andydrew")
+				.end()
+				.appendTo("ul");
 
-
-			
-
-/*			element.find('li').last().on('mouseenter', function() {
-					console.log("COOOL!");
-			})	
-			*/
 		}
 	};
-}])
-
+}]);
+ 
 
 
 

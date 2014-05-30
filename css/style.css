@@ -2,14 +2,12 @@
 	width:45%;
 }
 
- .score {
- 	
- 	
+.score { 	
  	padding-left:45%;
  	font-size:350px;
  }
 
-.cardWrapper {
+.card-animation {
 	float:left;
     height: 160px;
 	width:160px;
@@ -20,14 +18,12 @@
 	position: absolute;
     height: 160px;
 	width:160px;
-	font-family: 'Helvetica';	
+	font-family: 'Helvetica';
 	font-size:110px;
 	background:white;
 	text-align:center;
-		
 	color:#663399;
 	border:5px solid #663399;
-
 }
 
 .solved {
@@ -35,18 +31,17 @@
 }
 
 .back {
-	  
- 	  background-size: auto 160px;
-  	  background-position: center;
+	background-size: auto 160px;
+  	background-position: center;
 }
 
- .noSelect {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.noSelect {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
